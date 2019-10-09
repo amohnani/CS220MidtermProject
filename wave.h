@@ -17,6 +17,20 @@
 void write_wave_header(FILE *out, unsigned num_samples);
 void read_wave_header(FILE *in, unsigned *num_samples);
 
-/* TODO: add declarations for additional functions */
+void render_sine_wave(int16_t buf[], unsigned num_samples, unsigned channel, float freq_hz, float amplitude);
+
+void render_sine_wave_stereo(int16_t buf[], unsigned num_samples, float freq_hz, float amplitude);
+
+void render_square_wave(int16_t buf[], unsigned num_samples, unsigned channel, float freq_hz, float amplitude);
+
+void render_square_wave_stereo(int16_t buf[], unsigned num_samples, float freq_hz, float amplitude);
+
+void render_saw_wave(int16_t buf[], unsigned num_samples, unsigned channel, float freq_hz, float amplitude);
+
+void render_saw_wave_stereo(int16_t buf[], unsigned num_samples, float freq_hz, float amplitude);
+
+void render_voice (int16_t buf[], unsigned num_samples, unsigned channel, float freq_hz, float amplitude, unsigned voice);
+
+void render_voice_stereo (int16_t buf[], unsigned num_samples, float freq_hz, float amplitude, unsigned voice);
 
 #endif /* WAVE_H */
