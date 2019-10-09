@@ -11,7 +11,7 @@
 void render_sine_wave(int16_t buf[], unsigned num_samples, unsigned channel, float freq_hz, float amplitude)
 {
   for (int i = channel; i < num_samples; i+= 2){
-    buf[i] = amplitude*sin((1/SAMPLES_PER_SECOND)*i*freq_hz*2*PI);
+    buf[i] +=  amplitude*sin((1/SAMPLES_PER_SECOND)*i*freq_hz*2*PI);
   }
 }
 
@@ -23,17 +23,38 @@ void render_sine_wave_stereo(int16_t buf[], unsigned num_samples, float freq_hz,
 void render_square_wave(int16_t buf[], unsigned num_samples, float freq_hz, float amplitude){
   for (int i = channel; i < num_samples; i+=2){
     if (amplitude*sin((1/SAMPLES_PER_SECOND)*i*freq_hz*2*PI) > 0){
-      buf[i] = amplitude;
+      buf[i] += amplitude;
     }else{
-      buf[i] = 0 - amplitude;
+      buf[i] +=  0 - amplitude;
     }
   }
-
 }
 
 void render_square_wave_stereo(int16_t buf[], unsigned num_samples, float freq_hz, float amplitude){
   render_square_wave(buf, num_samples, 0, freq_hz, amplitude);
   render_square_wave(buf, num_samples, 1, freq_hz, amplitude);
+}
+
+void render_saw_wave(int16_t buf[], unsigned num_samples, unsigned channel, float freq_hz, float amplitude, unsigned voice){
+  double cycle_time = 1/freq_hz;
+  double slope = (2*amplitude)/cycle_time;
+  for (int i = channel; i < num_samples; i+= 2){
+    buf[i] += -2*amplitude + (slope * (i % cycle_time));
+  }
+}
+
+void render_saw_wave_stereo(int16_t buf[], unsigned num_samples, float freq_hz, float amplitude){
+  render_saw_wave(buf, num_samples, 0, freq_hz, amplitude);
+  render_saw_wave(buf, num_samples, 1, freq_hz, amplitude);
+}
+
+void render_voice(int16_t buf[], unsigned num_samples, unsigned channel, float freq_hz, float amplitude, unsigned voice){
+
+}
+
+void render_voice_stereo(int16_t buf[], unsigned num_samples, float freq_hz, float amplitude, unsigned voice){
+
+
 }
 
 /*
