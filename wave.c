@@ -5,6 +5,37 @@
 #include "io.h"
 #include "wave.h"
 
+
+
+// Creates sin wave for one channel using formula
+void render_sine_wave(int16_t buf[], unsigned num_samples, unsigned channel, float freq_hz, float amplitude)
+{
+  for (int i = channel; i < num_samples; i+= 2){
+    buf[i] = amplitude*sin((1/SAMPLES_PER_SECOND)*i*freq_hz*2*PI);
+  }
+}
+
+void render_sine_wave_stereo(int16_t buf[], unsigned num_samples, float freq_hz, float amplitude){
+  render_sine_wave(buf, num_samples, 0, freq_hz, amplitude);
+  render_sine_wave(buf, num_samples, 1, freq_hz, amplitude);
+}
+
+void render_square_wave(int16_t buf[], unsigned num_samples, float freq_hz, float amplitude){
+  for (int i = channel; i < num_samples; i+=2){
+    if (amplitude*sin((1/SAMPLES_PER_SECOND)*i*freq_hz*2*PI) > 0){
+      buf[i] = amplitude;
+    }else{
+      buf[i] = 0 - amplitude;
+    }
+  }
+
+}
+
+void render_square_wave_stereo(int16_t buf[], unsigned num_samples, float freq_hz, float amplitude){
+  render_square_wave(buf, num_samples, 0, freq_hz, amplitude);
+  render_square_wave(buf, num_samples, 1, freq_hz, amplitude);
+}
+
 /*
  * Write a WAVE file header to given output stream.
  * Format is hard-coded as 44.1 KHz sample rate, 16 bit
