@@ -3,6 +3,9 @@
 CC=gcc
 CFLAGS=-std=c99 -lm  -pedantic -Wall -Wextra
 
+test: test.o io.o wave.o
+	$(CC) -O io.o wave.o
+
 # Links together files needed to create executable
 render_tone: render_tone.o wave.o io.o
 	$(CC) -o render_tone render_tone.o wave.o io.o
