@@ -20,7 +20,7 @@ void render_sine_wave_stereo(int16_t buf[], unsigned num_samples, float freq_hz,
   render_sine_wave(buf, num_samples, 1, freq_hz, amplitude);
 }
 
-void render_square_wave(int16_t buf[], unsigned num_samples, float freq_hz, float amplitude){
+void render_square_wave(int16_t buf[], unsigned num_samples, unsigned channel,  float freq_hz, float amplitude){
   for (int i = channel; i < num_samples; i+=2){
     if (amplitude*sin((1/SAMPLES_PER_SECOND)*i*freq_hz*2*PI) > 0){
       buf[i] += amplitude;
