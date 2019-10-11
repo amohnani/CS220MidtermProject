@@ -4,28 +4,28 @@
 #include "io.h"
 #include "wave.h"
 
-int parse_file(File *fptr, char[] directives, double[][4] nums);
-void free_mem(char[] directives, double[][4] nums, int count);
+int parse_file(FILE *, char[], double**);
+void free_mem(char[] , double**, int);
 
 int main(int argc, char *argv[]){
   if (argc != 2){
     fatal_error("Incorrect number of files in command line arguments.");
   }
-  File *input = fopen(argv[0], "r");
+  FILE *input = fopen(argv[0], "r");
   int num_samples;
   fscanf(input, " %d", &num_samples);
   int samples_per_beat;
-  fscanf(input, " &d", &samples_per_beat);
+  fscanf(input, " %d", &samples_per_beat);
   
-  char directives[];
-  double nums[][];
+  char * directives;
+  double **nums;
   int num_directives = parse_file(input, directives, nums);
 
   free_mem(directives, nums, num_directives);
   fclose(input);
 }
 
-int parse_file(File *fptr, char[] directives, double[][4] nums){
+int parse_file(FILE *fptr, char[] directives, double** nums){
   int count = 0;
   char direct;
   double num;
@@ -54,7 +54,7 @@ int parse_file(File *fptr, char[] directives, double[][4] nums){
   return count;
 }
 
-void free_mem(char[] directives, double[][4] nums, int count){
+void free_mem(char[] directives, double** nums, int count){
   for (int i = 0; i < count; i++){
     nums[i];
   }
