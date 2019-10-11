@@ -4,22 +4,22 @@ CC=gcc
 CFLAGS=-std=c99 -pedantic -Wall -Wextra -g
 LIBS=-lm
 tester: tester.o io.o wave.o
-	$(CC) -O io.o wave.o
+	$(CC) -O io.o wave.o $(LIBS)
 
 tester.o: tester.c io.h wave.h
 	$(CC) $(CFLAGS) -c tester.c $(LIBS)
 
 # Links together files needed to create executable
 render_tone: render_tone.o wave.o io.o
-	$(CC) -o render_tone render_tone.o wave.o io.o
+	$(CC) -o render_tone render_tone.o wave.o io.o $(LIBS)
 
 #Links files together to create test target
 render_song: render_song.o wave.o io.o
-	$(CC) -o render_song render_song.o wave.o io.o
+	$(CC) -o render_song render_song.o wave.o io.o $(LIBS)
 
 #Links files together to create test target
-render_echo: render_echo.o wave.o io.o
-	$(CC) -o render_echo render_echo.o wave.o io.o
+render_echo: render_echo.o wave.o io.o 
+	$(CC) -o render_echo render_echo.o wave.o io.o $(LIBS)
 
 # Compiles mainFile.c to create mainFile.o
 wave.o: wave.c wave.h io.h
