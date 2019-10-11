@@ -1,11 +1,13 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
-#include "wave.c"
-#include "io.c"
+#include "wave.h"
+#include "io.h"
+
+
 int  main(){
   FILE * out = fopen("tester.wav", "wb");
-
+  FILE * out2 = fopen("out.wav", "wb");
   char c = 'C';
   char cs[] = {'a','b','c','d'};
   int n  = 4;
@@ -23,9 +25,10 @@ int  main(){
   write_s16(out, d);
   write_s16_buf(out, e, n);
 
-  write_wave_header("out.wav", 44100);
+  write_wave_header(out2, 44100);
   //fatal_error("oh no");
   //printf("should not be printed");
   fclose(out);
+  fclose(out2);
   return 0;
 }

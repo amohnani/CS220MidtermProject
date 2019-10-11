@@ -114,6 +114,10 @@ void write_wave_header(FILE *out, unsigned num_samples) {
  *      number of (stereo) samples following the header
  *      should be stored
  */
+
+
+/* 
+
 void read_wave_header(FILE *in, unsigned *num_samples) {
   char label_buf[4];
   uint32_t ChunkSize, Subchunk1Size, SampleRate, ByteRate, Subchunk2Size;
@@ -125,6 +129,11 @@ void read_wave_header(FILE *in, unsigned *num_samples) {
   }
 
   read_u32(in, &ChunkSize); /* ignore */
+
+
+/*
+
+
 
   read_bytes(in, label_buf, 4u);
   if (memcmp(label_buf, "WAVE", 4u) != 0) {
@@ -158,7 +167,12 @@ void read_wave_header(FILE *in, unsigned *num_samples) {
 
   read_u32(in, &ByteRate); /* ignore */
 
+/*
+
+
   read_u16(in, &BlockAlign); /* ignore */
+
+/*
 
   read_u16(in, &BitsPerSample);
   if (BitsPerSample != BITS_PER_SAMPLE) {
@@ -172,8 +186,14 @@ void read_wave_header(FILE *in, unsigned *num_samples) {
 
   /* finally we're at the Subchunk2Size field, from which we can
    * determine the number of samples */
+
+
+/*
+
+
   read_u32(in, &Subchunk2Size);
   *num_samples = Subchunk2Size / NUM_CHANNELS / (BITS_PER_SAMPLE/8u);
 }
+
 
 /* TODO: add additional functions... */
