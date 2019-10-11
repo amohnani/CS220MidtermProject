@@ -4,7 +4,7 @@ CC=gcc
 CFLAGS=-std=c99 -pedantic -Wall -Wextra -g
 LIBS=-lm
 tester: tester.o io.o wave.o
-	$(CC) -O io.o wave.o $(LIBS)
+	$(CC) -o tester tester.o io.o wave.o $(LIBS)
 
 tester.o: tester.c io.h wave.h
 	$(CC) $(CFLAGS) -c tester.c $(LIBS)
