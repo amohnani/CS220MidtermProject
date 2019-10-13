@@ -86,13 +86,15 @@ void read_bytes(FILE * in, char data[], unsigned n) {
 void read_u16(FILE *in, uint16_t *val) {
   char input[2];
   read_bytes(in, input, 2);
-  *val = input[0] | (input[1] << 8);
+  unsigned char * usign = (unsigned char *) input;
+  *val = usign[0] | (usign[1] << 8);
 }
 
 void read_u32(FILE *in, uint32_t *val) {
   char input[4];
   read_bytes(in, input, 4);
-  *val = ((input[0] | (input[1] << 8) | (input[2] << 16) | (input[3] << 24))) & (2147483647);
+  unsigned char * usign = (unsigned char *) input;
+  *val = (usign[0] | (usign[1] << 8) | (usign[2] << 16) | (usign[3] << 24));
 }
 
 void read_s16(FILE *in, int16_t *val) {

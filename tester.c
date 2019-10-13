@@ -12,8 +12,9 @@ int  main(){
   fclose(out);
 
   FILE * in = fopen("out.wav", "rb");
-  unsigned *samples = 0;
-  read_wave_header(in, samples);
+  unsigned samples = 0;
+  read_wave_header(in, &samples);
+  printf("%u", samples);
   fclose(in);
   return 0;
 }
