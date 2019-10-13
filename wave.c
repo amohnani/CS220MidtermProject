@@ -11,7 +11,7 @@
 void render_sine_wave(int16_t buf[], unsigned num_samples, unsigned channel, float freq_hz, float amplitude)
 {
   for (int i = channel; i < num_samples; i+= 2){
-    buf[i] +=  amplitude*sin((1/SAMPLES_PER_SECOND)*i*freq_hz*2*PI);
+    buf[i] +=(int16_t) 32767/2* amplitude*sin(((float)i/SAMPLES_PER_SECOND)*freq_hz*2*PI);
   }
 }
 
@@ -21,11 +21,12 @@ void render_sine_wave_stereo(int16_t buf[], unsigned num_samples, float freq_hz,
 }
 
 void render_square_wave(int16_t buf[], unsigned num_samples, unsigned channel,  float freq_hz, float amplitude){
+  
   for (int i = channel; i < num_samples; i+=2){
-    if (amplitude*sin((1/SAMPLES_PER_SECOND)*i*freq_hz*2*PI) > 0){
-      buf[i] += amplitude;
+    if (amplitude*sin(((float)i/SAMPLES_PER_SECOND)*freq_hz*2*PI) > 0){
+      buf[i] += amplitude*32767;
     }else{
-      buf[i] +=  0 - amplitude;
+      buf[i] +=  0 - amplitude*32767;
     }
   }
 }
@@ -53,7 +54,13 @@ void render_voice(int16_t buf[], unsigned num_samples, unsigned channel, float f
 }
 
 void render_voice_stereo(int16_t buf[], unsigned num_samples, float freq_hz, float amplitude, unsigned voice){
-
+  if (voice == 0){
+    render_sine_wave_stereo(buf, num_samples, freq_hz, amplitude);
+  }else if (voice == 1){
+    render_square_wave_stereo(buf, num_samples, freq_hz, amplitude);
+  }else if (voice == 2){
+    render_square_wave_stereo(buf, num_samples, freq_hz, amplitude);
+  }
 
 }
 
