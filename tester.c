@@ -7,12 +7,12 @@
 
 
 int  main(){
-  FILE * out = fopen("out.wav", "wb");
-  write_wave_header(out, 44100);
-  fclose(out);
+  FILE * in = fopen("c70_sq.wav", "rb");
+  //write_wave_header(out, 44100);
+  //fclose(out);
 
-  FILE * in = fopen("out.wav", "rb");
-  unsigned samples = 0;
+  //FILE * in = fopen("out.wav", "rb");
+  unsigned samples;
   read_wave_header(in, &samples);
   printf("%u", samples);
   fclose(in);
