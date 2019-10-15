@@ -17,14 +17,16 @@ int main(int argc, char *argv[]){
   sscanf(argv[4], "%d", &numsamples);
   FILE *fptr = fopen(argv[5], "wb");
   unsigned numstereo = 2 * numsamples;
-  int16_t buf[numstereo];
+  int16_t * buf = (int16_t *) calloc(numstereo, sizeof(int16_t));
   render_voice_stereo(buf, numstereo, frequency, amplitude, (unsigned int)voice);
-  FILE *test = fopen("test.txt", "w");
-  for (unsigned i = 0; i < numstereo; i+= 10){
-    fprintf(test, "%d ", buf[i]);
-  }
+  //FILE *test = fopen("test.txt", "w");
+  //for (unsigned i = 0; i < numstereo; i+= 10){
+  //  fprintf(test, "%d ", buf[i]);
+  // }
   write_wave_header(fptr, numsamples);
   write_s16_buf(fptr, buf, (unsigned int)numstereo);
+  free(buf);
   fclose(fptr);
-  fclose(test);
+  //fclose(test);
+  return 0;
 }

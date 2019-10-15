@@ -17,9 +17,9 @@ int main(int argc, char *argv[]){
   read_wave_header(input, &num_samples);
   int num_stereo = num_samples*2;
   FILE *output = fopen(argv[2], "wb");
-  int16_t buf[num_stereo];
-  int16_t bufcopy[num_stereo];
-  read_s16_buf(input, buf, num_samples);
+  int16_t * buf = (int16_t *)calloc(num_stereo, sizeof(int16_t)); 
+  int16_t * bufcopy = (int16_t *)calloc(num_stereo, sizeof(int16_t));
+  read_s16_buf(input, buf, num_stereo);
 
   //Echo Here to Buf
   for (int i = 0; i < num_stereo; i++){
@@ -31,6 +31,8 @@ int main(int argc, char *argv[]){
 
   write_wave_header(output, num_samples);
   write_s16_buf(output, buf, num_stereo);
+  free(buf);
+  free(bufcopy);
   fclose(input);
   fclose(output);
   
