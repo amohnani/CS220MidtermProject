@@ -16,11 +16,11 @@ int main(int argc, char *argv[]){
   sscanf(argv[3], "%f", &amplitude);
   sscanf(argv[4], "%d", &numsamples);
   FILE *fptr = fopen(argv[5], "wb");
-  int numstereo = 2 * numsamples;
+  unsigned numstereo = 2 * numsamples;
   int16_t buf[numstereo];
   render_voice_stereo(buf, numstereo, frequency, amplitude, (unsigned int)voice);
   FILE *test = fopen("test.txt", "w");
-  for (int i = 0; i < numstereo; i+= 10){
+  for (unsigned i = 0; i < numstereo; i+= 10){
     fprintf(test, "%d ", buf[i]);
   }
   write_wave_header(fptr, numsamples);
