@@ -32,14 +32,24 @@ int main(int argc, char *argv[]){
   while (fscanf(input, " %c", &directive) == 1){
     if (directive == 'N'){
       fscanf(input, " %f %d", &length, &note);
-      freq_hz = 440 * pow(2, (note-69)/12);
+      freq_hz = 440 * pow(2, (note-69.0)/12.0);
+      printf(" %0.4f ", freq_hz);
       render_voice_stereo((buf + current), length*samples_per_beat, freq_hz, amplitude, voice);
       current += length*samples_per_beat;
     }else if (directive == 'P'){
       fscanf(input, " %f", &length);
       current += length*samples_per_beat;
     }else if (directive == 'C'){
-      
+      fscanf(input, " %f", &length);
+      while (fscanf(input, " %d", &note) == 1){
+	if (note == 999){
+	  break;
+	}
+	freq_hz = 440 * pow(2, (note-69.0)/12.0);
+	printf(" %0.4f ", freq_hz);
+	render_voice_stereo((buf + current), length*samples_per_beat, freq_hz, amplitude, voice);
+      }
+      current += length*samples_per_beat;
     }else if (directive == 'V'){
       fscanf(input, " %u", &voice);
       if (voice >2){
