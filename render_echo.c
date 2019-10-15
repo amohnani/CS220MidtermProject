@@ -17,9 +17,16 @@ int main(int argc, char *argv[]){
   read_wave_header(input, &num_samples);
   FILE *output = fopen(argv[2], "wb");
   int16_t buf[num_samples];
+  int16_t bufcopy[num_samples];
   read_s16_buf(input, buf, num_samples);
 
   //Echo Here to Buf
+  for (int i = 0; i < num_samples; i++){
+    bufcopy[i] = buf[i];
+  }
+  for (int i = delay; i < num_samples; i++){
+    buf[i] += amplitude*bufcopy[i-delay];
+  }
 
   write_wave_header(output, num_samples);
   write_s16_buf(outpout, buf, num_samples);
