@@ -10,8 +10,8 @@
 // Creates sin wave for one channel using formula
 void render_sine_wave(int16_t buf[], unsigned num_samples, unsigned channel, float freq_hz, float amplitude)
 {
-  for (int i = channel; i < num_samples; i+= 2){
-    buf[i] +=(int16_t) 32767/2* amplitude*sin(((float)i/SAMPLES_PER_SECOND)*freq_hz*2*PI);
+  for (int i = channel; i < (int)num_samples; i+= 2){
+    buf[i] +=(int16_t) 32767* amplitude*sin(((float)i/SAMPLES_PER_SECOND)*freq_hz*2*PI);
   }
 }
 
@@ -22,7 +22,7 @@ void render_sine_wave_stereo(int16_t buf[], unsigned num_samples, float freq_hz,
 
 void render_square_wave(int16_t buf[], unsigned num_samples, unsigned channel,  float freq_hz, float amplitude){
   
-  for (int i = channel; i < num_samples; i+=2){
+  for (int i = channel; i <(int) num_samples; i+=2){
     if (amplitude*sin(((float)i/SAMPLES_PER_SECOND)*freq_hz*2*PI) > 0){
       buf[i] += amplitude*32767;
     }else{
@@ -37,9 +37,9 @@ void render_square_wave_stereo(int16_t buf[], unsigned num_samples, float freq_h
 }
 
 void render_saw_wave(int16_t buf[], unsigned num_samples, unsigned channel, float freq_hz, float amplitude){
-  double cycle_time = 1/freq_hz;
+  double cycle_time = 1/freq_hz*44100;
   double slope = (2*amplitude)/cycle_time;
-  for (int i = channel; i < num_samples; i+= 2){
+  for (int i = channel; i < (int)num_samples; i+= 2){
     buf[i] += -2*amplitude + (slope * (i % (int)cycle_time));
   }
 }
@@ -50,7 +50,13 @@ void render_saw_wave_stereo(int16_t buf[], unsigned num_samples, float freq_hz, 
 }
 
 void render_voice(int16_t buf[], unsigned num_samples, unsigned channel, float freq_hz, float amplitude, unsigned voice){
-
+  if (voice == 0){
+    render_sine_wave(buf, num_samples, channel, freq_hz, amplitude);
+  }else if (voice == 1){
+     render_square_wave(buf, num_samples, channel, freq_hz, amplitude);
+  }else if (voice == 2){
+    render_saw_wave(buf, num_samples, channel, freq_hz, amplitude);
+  }
 }
 
 void render_voice_stereo(int16_t buf[], unsigned num_samples, float freq_hz, float amplitude, unsigned voice){
