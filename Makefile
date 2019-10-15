@@ -44,4 +44,4 @@ render_echo.o: render_echo.c wave.h io.h
 # Removes all object files and executables,
 # so we can start fresh
 clean:
-	rm -f *.o render_song render_tone render_echo
+	rm -f *.o *.wav render_song render_tone render_echo tester
