@@ -21,12 +21,14 @@ void write_byte(FILE *out, char val) {
   }
 }
 
+//writes multiple bytes
 void write_bytes(FILE *out, const char data[], unsigned n) {
   for (int i = 0; i < (int)n; i++) {
     write_byte(out, data[i]);
   }
 }
 
+//writes uint16_t values
 void write_u16(FILE *out, uint16_t value) {
   char first = value % 256;
   char second = (value / 256) % 256;
@@ -38,6 +40,7 @@ void write_u16(FILE *out, uint16_t value) {
   }
 }
 
+//writes uint32_t values
 void write_u32(FILE *out, uint32_t value) {
   unsigned char first = value % 256;
   char second = (value / 256) % 256;
@@ -51,6 +54,7 @@ void write_u32(FILE *out, uint32_t value) {
   }
 }
 
+//writes int16_t values
 void write_s16(FILE *out, int16_t value) {
   char first = value % 256;
   char second = (value / 256) % 256;
@@ -60,6 +64,7 @@ void write_s16(FILE *out, int16_t value) {
   }
 }
 
+//writes an array of int16_t values
 void write_s16_buf(FILE *out, const int16_t buf[], unsigned n) {
   for (int i = 0; i < (int)n; i++) {
     write_s16(out, buf[i]);
@@ -77,12 +82,14 @@ void read_byte(FILE * in, char *val) {
   }
 }
 
+//reads multiple bytes
 void read_bytes(FILE * in, char data[], unsigned n) {
   for (int i = 0; i < (int)n; i++){
     read_byte(in, (data+i));
   }
 }
 
+//reads unsigned int16_ts
 void read_u16(FILE *in, uint16_t *val) {
   char input[2];
   read_bytes(in, input, 2);
@@ -90,6 +97,7 @@ void read_u16(FILE *in, uint16_t *val) {
   *val = usign[0] | (usign[1] << 8);
 }
 
+//reads uint32_t
 void read_u32(FILE *in, uint32_t *val) {
   char input[4];
   read_bytes(in, input, 4);
@@ -97,12 +105,14 @@ void read_u32(FILE *in, uint32_t *val) {
   *val = (usign[0] | (usign[1] << 8) | (usign[2] << 16) | (usign[3] << 24));
 }
 
+//reads int16_t
 void read_s16(FILE *in, int16_t *val) {
   char input[2];
   read_bytes(in, input, 2); 
   *val = input[0] | (input[1] << 8);
 }
 
+//reads an array of int16_t values
 void read_s16_buf(FILE *in, int16_t buf[], unsigned n){
   for (int i = 0; i < (int)n; i++) {
     read_s16(in, &buf[i]);
