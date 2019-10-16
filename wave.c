@@ -37,10 +37,10 @@ void render_square_wave_stereo(int16_t buf[], unsigned num_samples, float freq_h
 }
 
 void render_saw_wave(int16_t buf[], unsigned num_samples, unsigned channel, float freq_hz, float amplitude){
-  double cycle_time = 1/freq_hz*44100;
-  double slope = (2*amplitude)/cycle_time;
+  double samples_per_cycle = (double)SAMPLES_PER_SECOND * 2 / freq_hz;
+  double slope = (2.0 * amplitude * 32767.0) / samples_per_cycle;
   for (int i = channel; i < (int)num_samples; i+= 2){
-    buf[i] += -2*amplitude + (slope * (i % (int)cycle_time));
+    buf[i] += (- amplitude * 32767.0) + (slope * (double)(i % (int)samples_per_cycle));
   }
 }
 
@@ -65,7 +65,7 @@ void render_voice_stereo(int16_t buf[], unsigned num_samples, float freq_hz, flo
   }else if (voice == 1){
     render_square_wave_stereo(buf, num_samples, freq_hz, amplitude);
   }else if (voice == 2){
-    render_square_wave_stereo(buf, num_samples, freq_hz, amplitude);
+    render_saw_wave_stereo(buf, num_samples, freq_hz, amplitude);
   }
 
 }
