@@ -78,10 +78,11 @@ void write_s16_buf(FILE *out, const int16_t buf[], unsigned n) {
 // and returning the value to the address
 
 void read_byte(FILE * in, char *val) {
-  *val = fgetc(in);
-  if (*val == EOF){
+  int input = fgetc(in);
+  if (input == EOF){
     fatal_error("error in reading byte");
   }
+  *val = input;
 }
 
 //reads multiple bytes
@@ -103,20 +104,27 @@ void read_u16(FILE *in, uint16_t *val) {
 void read_u32(FILE *in, uint32_t *val) {
   char input[4];
   read_bytes(in, input, 4);
-  unsigned char * usign = (unsigned char *) input;
+  unsigned char usign[4];
+  for (int i = 0; i < 4; i++) {
+    usign[i] = (unsigned) input[i];
+  }
   *val = (usign[0] | (usign[1] << 8) | (usign[2] << 16) | (usign[3] << 24));
 }
 
 //reads int16_t
 void read_s16(FILE *in, int16_t *val) {
   char input[2];
-  read_bytes(in, input, 2); 
-  *val = input[0] | (input[1] << 8);
+  read_bytes(in, input, 2);
+  unsigned char uinput[2];
+  for (int i = 0; i < 2; i++) {
+    uinput[i] = (unsigned) input[i];
+  }
+  *val = uinput[0] | (uinput[1] << 8);
 }
 
 //reads an array of int16_t values
 void read_s16_buf(FILE *in, int16_t buf[], unsigned n){
-  for (int i = 0; i < (int)n; i++) {
+  for (unsigned i = 0; i < n; i++) {
     read_s16(in, &buf[i]);
   }
 }
