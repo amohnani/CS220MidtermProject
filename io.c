@@ -16,7 +16,8 @@ void fatal_error(const char *message) {
 // the next few write functions write a single data value
 // of various types in little-endian format
 void write_byte(FILE *out, char val) {
-  if (fputc(val, out) == EOF) {
+  unsigned uval = (unsigned) val;
+  if (fputc(uval, out) == EOF) {
     fatal_error("error in writing byte");
   }
 }
@@ -30,8 +31,8 @@ void write_bytes(FILE *out, const char data[], unsigned n) {
 
 //writes uint16_t values
 void write_u16(FILE *out, uint16_t value) {
-  char first = value % 256;
-  char second = (value / 256) % 256;
+  unsigned first = value % 256;
+  unsigned second = (value / 256) % 256;
   if (fputc(first, out) == EOF) {
     fatal_error("error in writing first u16");
   }
@@ -42,10 +43,10 @@ void write_u16(FILE *out, uint16_t value) {
 
 //writes uint32_t values
 void write_u32(FILE *out, uint32_t value) {
-  unsigned char first = value % 256;
-  char second = (value / 256) % 256;
-  char third = (value / 65536) % 256;
-  char fourth = (value / 16777216) % 256;
+  unsigned first = value % 256;
+  unsigned second = (value / 256) % 256;
+  unsigned third = (value / 65536) % 256;
+  unsigned fourth = (value / 16777216) % 256;
   if ((fputc(first, out) == EOF) ||
       (fputc(second, out) == EOF) ||
       (fputc(third, out) == EOF) ||
@@ -56,8 +57,9 @@ void write_u32(FILE *out, uint32_t value) {
 
 //writes int16_t values
 void write_s16(FILE *out, int16_t value) {
-  char first = value % 256;
-  char second = (value / 256) % 256;
+  unsigned uval = (unsigned) value;
+  unsigned first = uval % 256;
+  unsigned second = (uval / 256) % 256;
   if ((fputc(first, out) == EOF) ||
       (fputc(second, out) == EOF)) {
     fatal_error("error in writing u32");
