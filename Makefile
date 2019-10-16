@@ -3,7 +3,7 @@
 CC=gcc
 CFLAGS=-std=c99 -pedantic -Wall -Wextra -g
 LIBS=-lm
-
+all: render_tone render_song render_echo
 # Links together files needed to create executable
 render_tone: render_tone.o wave.o io.o
 	$(CC) -o render_tone render_tone.o wave.o io.o $(LIBS)
