@@ -10,6 +10,7 @@
 #include "wave.h"
 
 int main(int argc, char *argv[]){
+  // makes sure there are a valid amount of arguments
   if (argc != 5){
     fatal_error("Incorrect number of inputs.\n");
   }
@@ -28,15 +29,18 @@ int main(int argc, char *argv[]){
     fatal_error("Input file does not exist.\n");
   }
 
-  //allocates memory necessary for echoing sound
+  // reads the samples in the file
   read_wave_header(input, &num_samples);
-  
   int num_stereo = num_samples*2;
+
   FILE *output = fopen(argv[2], "wb");
+
+  // buf is to read, and then bufcopy is what will be added for the echo
   int16_t * buf = (int16_t *)calloc(num_stereo, sizeof(int16_t)); 
   int16_t * bufcopy = (int16_t *)calloc(num_stereo, sizeof(int16_t));
+
   read_s16_buf(input, buf, num_stereo);
-  printf("Reads input file\n");
+  
   //copies original signal to copy array
   for (int i = 0; i < num_stereo; i++){
     bufcopy[i] = buf[i];
@@ -50,6 +54,8 @@ int main(int argc, char *argv[]){
   //writes buffer array to output file
   write_wave_header(output, num_samples);
   write_s16_buf(output, buf, num_stereo);
+
+  // free allocated 
   free(buf);
   free(bufcopy);
 
@@ -57,6 +63,8 @@ int main(int argc, char *argv[]){
   if (ferror(input) || ferror(output)){
     fatal_error("Error reading or writing files.\n");
   }
+
+  // close opened files
   fclose(input);
   fclose(output);
   
