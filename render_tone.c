@@ -27,12 +27,11 @@ int main(int argc, char *argv[]){
 
   //adds tone to buffer array
   render_voice_stereo(buf, numstereo, frequency, amplitude, (unsigned int)voice);
-<<<<<<< HEAD
   FILE *test = fopen("test.txt", "w");
   for (unsigned i = 0; i < numstereo; i+= 10){
     fprintf(test, "%d ", buf[i]);
   }
-=======
+
   
   //FILE *test = fopen("test.txt", "w");
   //for (unsigned i = 0; i < numstereo; i+= 10){
@@ -40,7 +39,6 @@ int main(int argc, char *argv[]){
   // }
 
   //output buffer array to output file
->>>>>>> 653d5b0758efea04532289e200e01340fa34cbe3
   write_wave_header(fptr, numsamples);
   write_s16_buf(fptr, buf, (unsigned int)numstereo);
 
