@@ -1,3 +1,7 @@
+//CS220 Midterm Project
+//Abhi Mohnani and Alan Zhang
+//amohnan1 and azhang42
+
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
