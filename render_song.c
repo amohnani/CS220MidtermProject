@@ -9,23 +9,26 @@ int main(int argc, char *argv[]){
     fatal_error("Incorrect number of files in command line arguments.");
   }
 
-  //opens files and reads from command line arguments
+  //opens files and checks that they are valid
   FILE *input = fopen(argv[1], "rb");
   FILE *output = fopen(argv[2], "wb");
   if (input == NULL || output == NULL || ferror(input) || ferror(output)){
     fatal_error("Error opening files.\n");
   }
-  
+
+  //gets information from command-line arguments
   int num_samples;
   int samples_per_beat;
   if (fscanf(input, " %d", &num_samples) != 1 ||  fscanf(input, " %d", &samples_per_beat) != 1){
     fatal_error("Incorrectly formatted input.\n");
   }
+  
   //allocates memory for buffer array
   int num_stereo = 2*num_samples;
   int16_t *buf = calloc(num_stereo,sizeof(int16_t));
-  
-  char directive;
+
+  //declares and initializes necessary variables
+  char directive = ' ';
   unsigned voice = 0;
   float amplitude = 0.1;
   float length, freq_hz;
@@ -87,7 +90,8 @@ int main(int argc, char *argv[]){
       }
     }
   }
-  
+
+  //writes updated buffer array to output file
   write_wave_header(output, (unsigned)num_samples);
   write_s16_buf(output, buf, (unsigned)num_stereo);
   fclose(input);
