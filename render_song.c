@@ -12,11 +12,15 @@ int main(int argc, char *argv[]){
   //opens files and reads from command line arguments
   FILE *input = fopen(argv[1], "rb");
   FILE *output = fopen(argv[2], "wb");
+  if (input == NULL || output == NULL || ferror(input) || ferror(output)){
+    fatal_error("Error opening files.\n");
+  }
+  
   int num_samples;
-  fscanf(input, " %d", &num_samples);
   int samples_per_beat;
-  fscanf(input, " %d", &samples_per_beat);
-
+  if (fscanf(input, " %d", &num_samples) != 1 ||  fscanf(input, " %d", &samples_per_beat) != 1){
+    fatal_error("Incorrectly formatted input.\n");
+  }
   //allocates memory for buffer array
   int num_stereo = 2*num_samples;
   int16_t *buf = calloc(num_stereo,sizeof(int16_t));
@@ -31,7 +35,9 @@ int main(int argc, char *argv[]){
   //continues while there are more directives to perform
   while (fscanf(input, " %c", &directive) == 1){
     if (directive == 'N'){
-      fscanf(input, " %f %d", &length, &note);
+      if (fscanf(input, " %f %d", &length, &note) != 2){
+	fatal_error("Incorrectly formatted input.\n");
+      }
       //creates frequency according to MIDI note
       freq_hz = 440 * pow(2, (note-69.0)/12.0);
       //changes buffer array using new note
@@ -40,11 +46,15 @@ int main(int argc, char *argv[]){
       current += length*samples_per_beat*2;
       
     }else if (directive == 'P'){
-      fscanf(input, " %f", &length);
+      if (fscanf(input, " %f", &length) != 1){
+	fatal_error("Incorrectly formatted input.\n");
+      }
       //changes index to create a pause
       current += length*samples_per_beat*2;
     }else if (directive == 'C'){
-      fscanf(input, " %f", &length);
+      if (fscanf(input, " %f", &length) != 1){
+	fatal_error("Incorrectly formatted input.\n");
+      }
 
       //continues while there are more notes to be added
       while (fscanf(input, " %d", &note) == 1){
@@ -60,16 +70,20 @@ int main(int argc, char *argv[]){
       
     }else if (directive == 'V'){
       //changes voice
-      fscanf(input, " %u", &voice);
+      if (fscanf(input, " %u", &voice) != 1){
+	fatal_error("Incorrectly formatted input.\n");
+      }
       if (voice >2){
-	fatal_error("Malformed input\n");
+	fatal_error("Voice value is not valid.\n");
       }
       
     }else if (directive == 'A'){
       //changes amplitude
-      fscanf(input, " %f", &amplitude);
+      if (fscanf(input, " %f", &amplitude) != 1){
+	fatal_error("Incorrectly formatted input.\n");
+      }
       if (amplitude < 0 || amplitude > 1){
-	fatal_error("Malformed input\n");
+	fatal_error("Amplitude value is not valid.\n");
       }
     }
   }
