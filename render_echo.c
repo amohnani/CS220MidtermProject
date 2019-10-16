@@ -25,12 +25,13 @@ int main(int argc, char *argv[]){
 
   //allocates memory necessary for echoing sound
   read_wave_header(input, &num_samples);
+  
   int num_stereo = num_samples*2;
   FILE *output = fopen(argv[2], "wb");
   int16_t * buf = (int16_t *)calloc(num_stereo, sizeof(int16_t)); 
   int16_t * bufcopy = (int16_t *)calloc(num_stereo, sizeof(int16_t));
   read_s16_buf(input, buf, num_stereo);
-
+  printf("Reads input file\n");
   //copies original signal to copy array
   for (int i = 0; i < num_stereo; i++){
     bufcopy[i] = buf[i];
