@@ -11,9 +11,15 @@ int main(int argc, char *argv[]){
   int delay;
   float amplitude;
   unsigned num_samples;
-  sscanf(argv[3], "%d", &delay);
-  sscanf(argv[4], "%f", &amplitude);
+
+  if (sscanf(argv[3], "%d", &delay) != 1 ||  sscanf(argv[4], "%f", &amplitude) != 1){
+    fatal_error("Malformed command-line arguments.\n");
+  }
+  
   FILE *input = fopen(argv[1], "rb");
+  if (input == NULL){
+    fatal_error("Input file does not exist.\n");
+  }
   read_wave_header(input, &num_samples);
   int num_stereo = num_samples*2;
   FILE *output = fopen(argv[2], "wb");
@@ -33,6 +39,9 @@ int main(int argc, char *argv[]){
   write_s16_buf(output, buf, num_stereo);
   free(buf);
   free(bufcopy);
+  if (ferror(input) || ferror(output)){
+    fatal_error("Error reading or writing files.\n");
+  }
   fclose(input);
   fclose(output);
   

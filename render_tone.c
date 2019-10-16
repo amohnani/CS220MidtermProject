@@ -11,10 +11,13 @@ int main(int argc, char *argv[]){
   }
   int numsamples, voice;
   float frequency, amplitude; 
-  sscanf(argv[1], "%d", &voice);
-  sscanf(argv[2], "%f", &frequency);
-  sscanf(argv[3], "%f", &amplitude);
-  sscanf(argv[4], "%d", &numsamples);
+  if (sscanf(argv[1], "%d", &voice) != 1 ||
+  sscanf(argv[2], "%f", &frequency) != 1 ||
+  sscanf(argv[3], "%f", &amplitude) != 1 ||
+      sscanf(argv[4], "%d", &numsamples) != 1){
+    fatal_error("Command line arguments are incorrectly formatted.\n");
+  }
+  
   FILE *fptr = fopen(argv[5], "wb");
   unsigned numstereo = 2 * numsamples;
   int16_t * buf = (int16_t *) calloc(numstereo, sizeof(int16_t));
@@ -26,6 +29,9 @@ int main(int argc, char *argv[]){
   write_wave_header(fptr, numsamples);
   write_s16_buf(fptr, buf, (unsigned int)numstereo);
   free(buf);
+  if (ferror(fptr)){
+    fatal_error("Error while writing file.");
+  }
   fclose(fptr);
   //fclose(test);
   return 0;
