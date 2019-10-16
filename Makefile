@@ -3,25 +3,20 @@
 CC=gcc
 CFLAGS=-std=c99 -pedantic -Wall -Wextra -g
 LIBS=-lm
-tester: tester.o io.o wave.o
-	$(CC) -o tester tester.o io.o wave.o $(LIBS)
-
-tester.o: tester.c io.h wave.h
-	$(CC) $(CFLAGS) -c tester.c $(LIBS)
 
 # Links together files needed to create executable
 render_tone: render_tone.o wave.o io.o
 	$(CC) -o render_tone render_tone.o wave.o io.o $(LIBS)
 
-#Links files together to create test target
+#Links files together to create executable
 render_song: render_song.o wave.o io.o
 	$(CC) -o render_song render_song.o wave.o io.o $(LIBS)
 
-#Links files together to create test target
+#Links files together to create executable
 render_echo: render_echo.o wave.o io.o 
 	$(CC) -o render_echo render_echo.o wave.o io.o $(LIBS)
 
-# Compiles mainFile.c to create mainFile.o
+# Compiles wave.c to create wave.o
 wave.o: wave.c wave.h io.h
 	$(CC) $(CFLAGS) -c wave.c $(LIBS)
 
@@ -29,15 +24,16 @@ wave.o: wave.c wave.h io.h
 io.o: io.c wave.h io.h
 	$(CC) $(CFLAGS) -c io.c $(LIBS)
 
-# Compiles functions.c to create functions.o
+# Compiles render_tone.c to create render_tone.o
 render_tone.o: render_tone.c wave.h io.h
 	$(CC) $(CFLAGS) -c render_tone.c $(LIBS)
 
 
-# Compiles functions.c to create functions.o
+# Compiles render_song.c to create render_tone.o
 render_song.o: render_song.c wave.h io.h
 	$(CC) $(CFLAGS) -c render_song.c $(LIBS)
 
+#Compiles render_echo.c to create render_echo.o
 render_echo.o: render_echo.c wave.h io.h
 	$(CC) $(CFLAGS) -c render_echo.c $(LIBS)
 
