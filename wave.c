@@ -12,7 +12,9 @@ void render_sine_wave(int16_t buf[], unsigned num_samples, unsigned channel, flo
 {
   int val = 0;
   for (unsigned i = channel; i <  num_samples; i+= 2){
+    //adds new sine wave onto existing buffer
     val = buf[i] + (int16_t) 32767* amplitude*sin(((float)i/SAMPLES_PER_SECOND)*freq_hz*PI);
+    //checks if new val will be out of bounds of int16_t variable
     if (val > 32766){
       val = 32767;
     }else if (val < -32767){
@@ -22,39 +24,72 @@ void render_sine_wave(int16_t buf[], unsigned num_samples, unsigned channel, flo
   }
 }
 
+//adds sine wave onto both channels
 void render_sine_wave_stereo(int16_t buf[], unsigned num_samples, float freq_hz, float amplitude){
   render_sine_wave(buf, num_samples, 0, freq_hz, amplitude);
   render_sine_wave(buf, num_samples, 1, freq_hz, amplitude);
 }
 
+//adds a square wave onto one channel of existing buffer
 void render_square_wave(int16_t buf[], unsigned num_samples, unsigned channel,  float freq_hz, float amplitude){
   int val = 0;
   for (unsigned i = channel; i < num_samples; i+=2){
-    if (sin(((float)i/SAMPLES_PER_SECOND)*freq_hz*PI) > 0){
-      val = buf[i] + amplitude*32767;
-    }else{
+    //calculates sine value for the current time
+    double sin_val = sin(((double)i/SAMPLES_PER_SECOND)*freq_hz*PI);
+    //adds new square wave to existing buffer
+    if (sin_val > 0.0){
+      val =  buf[i] + amplitude*32767;
+    }else if (sin_val < 0.0){
       val = buf[i] - amplitude*32767;
+    }else{
+      val = 0;
     }
-    if (val > 32766){
+    //checks if new value is out of bounds of int16_t
+    if (val > 32767){
       val = 32767;
     }else if (val < -32767){
       val = -32768;
     }
     buf[i] = val;
-  }
+    }
+
+  /* int val;
+  double samples_per_cycle = (double)SAMPLES_PER_SECOND * 2 / freq_hz;
+  for (unsigned i = channel; i < num_samples; i+= 2){
+    
+    if ((1000*i) %(int)( samples_per_cycle*1000) < (samples_per_cycle / 2*1000)){
+      val = buf[i] +round( amplitude*32767);
+    }else {
+      val = buf[i] - round(amplitude*32767);
+    }
+
+    if (val > 32767){
+      val = 32767;
+    }else if (val < -32767){
+      val = -32768;
+    }
+    buf[i] = val;
+    }*/
 }
 
+//adds square wave to existing buffer for both channels
 void render_square_wave_stereo(int16_t buf[], unsigned num_samples, float freq_hz, float amplitude){
   render_square_wave(buf, num_samples, 0, freq_hz, amplitude);
   render_square_wave(buf, num_samples, 1, freq_hz, amplitude);
 }
 
+//renders a saw wave onto an existing buffer
 void render_saw_wave(int16_t buf[], unsigned num_samples, unsigned channel, float freq_hz, float amplitude){
+  //calculates samples per cycle
   double samples_per_cycle = (double)SAMPLES_PER_SECOND * 2 / freq_hz;
+
+  //calculates slope of "saw" 
   double slope = (2.0 * amplitude * 32767.0) / samples_per_cycle;
   int val = 0;
   for (int i = channel; i < (int)num_samples; i+= 2){
+    //calculates value using modulo to determine when in the cycle the value is
     val = buf[i] + (- amplitude * 32767.0) + (slope * (double)(i % (int)samples_per_cycle));
+    //checks if new value is out of bounds of int16_t
     if (val > 32766){
       val = 32767;
     }else if (val < -32767){
@@ -64,11 +99,13 @@ void render_saw_wave(int16_t buf[], unsigned num_samples, unsigned channel, floa
   }
 }
 
+//adds saw wave to both channels
 void render_saw_wave_stereo(int16_t buf[], unsigned num_samples, float freq_hz, float amplitude){
   render_saw_wave(buf, num_samples, 0, freq_hz, amplitude);
   render_saw_wave(buf, num_samples, 1, freq_hz, amplitude);
 }
 
+//renders wave based on voice (0 = sine, 1 = square, 2 = saw)
 void render_voice(int16_t buf[], unsigned num_samples, unsigned channel, float freq_hz, float amplitude, unsigned voice){
   if (voice == 0){
     render_sine_wave(buf, num_samples, channel, freq_hz, amplitude);
@@ -79,6 +116,7 @@ void render_voice(int16_t buf[], unsigned num_samples, unsigned channel, float f
   }
 }
 
+//renders wave to both channels based on voice
 void render_voice_stereo(int16_t buf[], unsigned num_samples, float freq_hz, float amplitude, unsigned voice){
   if (voice == 0){
     render_sine_wave_stereo(buf, num_samples, freq_hz, amplitude);
