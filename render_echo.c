@@ -49,6 +49,7 @@ int main(int argc, char *argv[]){
   //copies sound after the delay to create the echo effect
   for (int i = 2 * delay; i < num_stereo; i++){
     float val = buf[i] + amplitude*bufcopy[i- 2 * delay];
+    // checks for clipping
     if (val > 32767) {
       val = 32767;
     } else if (val < -32767) {

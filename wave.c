@@ -55,25 +55,7 @@ void render_square_wave(int16_t buf[], unsigned num_samples, unsigned channel,  
       val = -32768;
     }
     buf[i] = (int16_t)val;
-    }
-
-  /* int val;
-  double samples_per_cycle = (double)SAMPLES_PER_SECOND * 2 / freq_hz;
-  for (unsigned i = channel; i < num_samples; i+= 2){
-    
-    if ((1000*i) %(int)( samples_per_cycle*1000) < (samples_per_cycle / 2*1000)){
-      val = buf[i] +round( amplitude*32767);
-    }else {
-      val = buf[i] - round(amplitude*32767);
-    }
-
-    if (val > 32767){
-      val = 32767;
-    }else if (val < -32767){
-      val = -32768;
-    }
-    buf[i] = val;
-    }*/
+  }
 }
 
 //adds square wave to existing buffer for both channels
