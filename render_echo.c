@@ -48,7 +48,13 @@ int main(int argc, char *argv[]){
 
   //copies sound after the delay to create the echo effect
   for (int i = 2 * delay; i < num_stereo; i++){
-    buf[i] += amplitude*bufcopy[i- 2 * delay];
+    float val = buf[i] + amplitude*bufcopy[i- 2 * delay];
+    if (val > 32767) {
+      val = 32767;
+    } else if (val < -32767) {
+      val = -32767;
+    }
+    buf[i] = (int16_t)val;
   }
 
   //writes buffer array to output file

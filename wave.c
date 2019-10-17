@@ -14,7 +14,7 @@
 // Creates sin wave for one channel using formula
 void render_sine_wave(int16_t buf[], unsigned num_samples, unsigned channel, float freq_hz, float amplitude)
 {
-  int val = 0;
+  float val = 0;
   for (unsigned i = channel; i <  num_samples; i+= 2){
     //adds new sine wave onto existing buffer
     val = buf[i] + (int16_t) 32767* amplitude*sin(((float)i/SAMPLES_PER_SECOND)*freq_hz*PI);
@@ -23,8 +23,8 @@ void render_sine_wave(int16_t buf[], unsigned num_samples, unsigned channel, flo
       val = 32767;
     }else if (val < -32767){
       val = -32768;
-    }
-    buf[i] = val;
+    } 
+    buf[i] = (int16_t) val;
   }
 }
 
@@ -36,15 +36,15 @@ void render_sine_wave_stereo(int16_t buf[], unsigned num_samples, float freq_hz,
 
 //adds a square wave onto one channel of existing buffer
 void render_square_wave(int16_t buf[], unsigned num_samples, unsigned channel,  float freq_hz, float amplitude){
-  int val = 0;
+  float val = 0;
   for (unsigned i = channel; i < num_samples; i+=2){
     //calculates sine value for the current time
-    double sin_val = sin(((double)i/SAMPLES_PER_SECOND)*freq_hz*PI);
+    float sin_val = sin(((float)i/SAMPLES_PER_SECOND)*freq_hz*PI);
     //adds new square wave to existing buffer
     if (sin_val > 0.0){
-      val =  buf[i] + amplitude*32767;
+      val = buf[i] + (float)amplitude*32767.0f;
     }else if (sin_val < 0.0){
-      val = buf[i] - amplitude*32767;
+      val = buf[i] - (float)amplitude*32767.0f;
     }else{
       val = 0;
     }
@@ -54,7 +54,7 @@ void render_square_wave(int16_t buf[], unsigned num_samples, unsigned channel,  
     }else if (val < -32767){
       val = -32768;
     }
-    buf[i] = val;
+    buf[i] = (int16_t)val;
     }
 
   /* int val;
@@ -89,7 +89,7 @@ void render_saw_wave(int16_t buf[], unsigned num_samples, unsigned channel, floa
 
   //calculates slope of "saw" 
   double slope = (2.0 * amplitude * 32767.0) / samples_per_cycle;
-  int val = 0;
+  float val = 0;
   for (int i = channel; i < (int)num_samples; i+= 2){
     //calculates value using modulo to determine when in the cycle the value is
     val = buf[i] + (- amplitude * 32767.0) + (slope * (double)(i % (int)samples_per_cycle));
@@ -99,7 +99,7 @@ void render_saw_wave(int16_t buf[], unsigned num_samples, unsigned channel, floa
     }else if (val < -32767){
       val = -32768;
     }
-    buf[i] = val;
+    buf[i] = (int16_t)val;
   }
 }
 

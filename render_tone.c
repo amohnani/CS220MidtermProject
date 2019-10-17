@@ -32,17 +32,7 @@ int main(int argc, char *argv[]){
 
   //adds tone to buffer array
   render_voice_stereo(buf, numstereo, frequency, amplitude, (unsigned int)voice);
-  FILE *test = fopen("test.txt", "w");
-  for (unsigned i = 0; i < numstereo; i+= 10){
-    fprintf(test, "%d ", buf[i]);
-  }
-
-  
-  //FILE *test = fopen("test.txt", "w");
-  //for (unsigned i = 0; i < numstereo; i+= 10){
-  //  fprintf(test, "%d ", buf[i]);
-  // }
-
+ 
   //output buffer array to output file
   write_wave_header(fptr, numsamples);
   write_s16_buf(fptr, buf, (unsigned int)numstereo);
@@ -54,6 +44,5 @@ int main(int argc, char *argv[]){
     fatal_error("Error while writing file.");
   }
   fclose(fptr);
-  fclose(test);
   return 0;
 }
