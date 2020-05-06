@@ -1,7 +1,6 @@
-This is the README for the Intermediate Programming Fall 2019
-midterm project.
+This project has three main user functionalities: generating tones, generating songs using tones, and rendering echoes on songs.
 
-Edit this file to add the names and JHED IDs of your team members.
+Tones can be rendered using a standard sine wave, square wave, or sawtooth wave.
 
 Alan Zhang azhang42
 Abhi Mohnani amohnan1
